@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouchta <ymouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 18:02:23 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/07/30 18:36:54 by ymouchta         ###   ########.fr       */
+/*   Updated: 2025/08/25 16:53:13 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	if_line_empty(char *line)
 	return (true);
 }
 
-bool	parssing(t_config *game, char *f_name)
+bool	parssing(t_game *game, char *f_name)
 {
 	char	*line;
 	char	*map;
@@ -44,8 +44,8 @@ bool	parssing(t_config *game, char *f_name)
 
 	list = 0;
 	map = NULL;
-	game->map_width = 0;
-	game->map_height = 0;
+	game->conf->map_width = 0;
+	game->conf->map_height = 0;
 	if (!check_name(f_name))
 		return (message_error(NAME), false);
 	fd = open(f_name, O_RDWR, 0777);
@@ -72,9 +72,9 @@ bool	parssing(t_config *game, char *f_name)
 			}
 			else
 			{
-				if ((int)ft_strlen(line) > game->map_width)
-					game->map_width = ft_strlen(line) - 1;
-				game->map_height += 1;
+				if ((int)ft_strlen(line) > game->conf->map_width)
+					game->conf->map_width = ft_strlen(line) - 1;
+				game->conf->map_height += 1;
 				tmp = ft_strdup(map);
 				if (map)
 					free(map);

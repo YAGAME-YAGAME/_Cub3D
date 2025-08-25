@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouchta <ymouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 14:49:32 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/07/30 18:17:10 by ymouchta         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:01:36 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,25 @@ int	parss_number_color(char *line)
 	return ((r << 16) | (g << 8) | b);
 }
 
-bool	parss_color(t_config *game, char **str)
+bool	parss_color(t_game *game, char **str)
 {
 	char	*new;
 
 	if (!ft_strcmp(str[0], "F"))
 	{
 		new = remove_nline(str[1]);
-		game->floor_color = parss_number_color(new);
+		game->conf->floor_color = parss_number_color(new);
 		free(new);
-		if (game->floor_color < 0)
+		if (game->conf->floor_color < 0)
 			return (false);
 		return (true);
 	}
 	else if (!ft_strcmp(str[0], "C"))
 	{
 		new = remove_nline(str[1]);
-		game->ceiling_color = parss_number_color(new);
+		game->conf->ceiling_color = parss_number_color(new);
 		free(new);
-		if (game->ceiling_color < 0)
+		if (game->conf->ceiling_color < 0)
 			return (false);
 		return (true);
 	}
@@ -77,7 +77,7 @@ bool	parss_color(t_config *game, char **str)
 		return (false);
 }
 
-bool	color_init(t_config *game, char *str)
+bool	color_init(t_game *game, char *str)
 {
 	char	**tab;
 

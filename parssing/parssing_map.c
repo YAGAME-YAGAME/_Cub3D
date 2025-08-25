@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouchta <ymouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 18:39:57 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/07/30 18:35:10 by ymouchta         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:06:36 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ int	valid_cara(char c)
 		return (0);
 }
 
-int	find_player(t_config *game, int x, int y, char c)
+int	find_player(t_game *game, int x, int y, char c)
 {
-	game->player_x = x;
-	game->player_y = y;
-	game->player_dir = c;
+	game->player.x = x;
+	game->player.y = y;
+	game->player.dir = c;
 	return (1);
 }
 
-bool	check_caracter(t_config *game, char **map)
+bool	check_caracter(t_game *game, char **map)
 {
 	int	i;
 	int	j;
@@ -84,14 +84,14 @@ void	add_space(int size, char **map)
 	}
 }
 
-bool	parssing_map(t_config *game, char *str)
+bool	parssing_map(t_game *game, char *str)
 {
-	game->map = ft_split(str, '\n');
-	add_space(game->map_width, game->map);
-	if (!check_caracter(game, game->map))
-		return (message_error(CRCTR), clean_tab(&game->map), false);
-	if (!check_walls(game->map_height, game->map))
-		return (message_error(WALL), clean_tab(&game->map), false);
+	game->conf->map = ft_split(str, '\n');
+	add_space(game->conf->map_width, game->conf->map);
+	if (!check_caracter(game, game->conf->map))
+		return (message_error(CRCTR), clean_tab(&game->conf->map), false);
+	if (!check_walls(game->conf->map_height, game->conf->map))
+		return (message_error(WALL), clean_tab(&game->conf->map), false);
 	else
 		return (true);
 }

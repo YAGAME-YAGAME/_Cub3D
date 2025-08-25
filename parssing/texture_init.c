@@ -3,60 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   texture_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouchta <ymouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 23:08:53 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/07/30 18:18:48 by ymouchta         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:00:41 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-bool	no_init(t_config *game, char *path)
+bool	no_init(t_game *game, char *path)
 {
 	char	*str;
 
 	str = remove_nline(path);
-	game->no_texture_path = str;
+	game->conf->no_texture_path = str;
 	return (true);
 	free(str);
 	return (false);
 }
 
-bool	so_init(t_config *game, char *path)
+bool	so_init(t_game *game, char *path)
 {
 	char	*str;
 
 	str = remove_nline(path);
-	game->so_texture_path = str;
+	game->conf->so_texture_path = str;
 	return (true);
 	free(str);
 	return (false);
 }
 
-bool	we_init(t_config *game, char *path)
+bool	we_init(t_game *game, char *path)
 {
 	char	*str;
 
 	str = remove_nline(path);
-	game->we_texture_path = str;
+	game->conf->we_texture_path = str;
 	return (true);
 	free(str);
 	return (false);
 }
 
-bool	ea_init(t_config *game, char *path)
+bool	ea_init(t_game *game, char *path)
 {
 	char	*str;
 
 	str = remove_nline(path);
-	game->ea_texture_path = str;
+	game->conf->ea_texture_path = str;
 	return (true);
 	free(str);
 	return (false);
 }
 
-bool	text_init(t_config *game, char *line)
+bool	text_init(t_game *game, char *line)
 {
 	char	**tb_text;
 
