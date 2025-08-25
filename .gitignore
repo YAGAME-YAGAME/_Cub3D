@@ -1,0 +1,43 @@
+# Object files
+*.o
+*.obj
+
+# Libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+cub3D
+
+# PDF files (project documentation can be large)
+*.pdf
+
+# Build directories
+build/
+builds/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# MLX42 build artifacts
+MLX42/build/
+MLX42
