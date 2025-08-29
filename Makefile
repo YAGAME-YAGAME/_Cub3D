@@ -20,6 +20,7 @@ SRCS = cub3D.c \
 	   game_start/set_colors.c      \
 	   game_start/draw.c     		\
 	   game_start/handle_input.c    \
+	   game_start/render.c		    \
 
 
 OBJS = $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:24:17 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/08/27 18:26:53 by yagame           ###   ########.fr       */
+/*   Updated: 2025/08/29 12:33:56 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_config
 	int		ceiling_color;
 	char	**map;
 	mlx_image_t *img;
+	mlx_image_t *screen; // added: main rendering image
 	int		map_width;
 	int		map_height;
 	// int		player_x;
@@ -101,10 +102,13 @@ char		*trim_whitespace(char *str);
 int			count_lines_in_file(char *filename);
 
 // start game
-int 		start_game(t_game *game);
+int		start_game(t_game *game);
 void 		ft_set_ceil_floor_color(t_game * game);
 void 		draw_minimap(t_game *g);
 void 		_init(t_game *game);
 void 		handle_input(void *param);
+
+// rendering / raycasting
+void		render_frame(t_game *g);
 
 #endif

@@ -15,6 +15,8 @@ void _init(t_game *game)
 	game->player.dir = 'N';
 	game->player.angle = 0.0f;
 	game->player.speed = 1;
+	if (!game->conf)
+		return ;
 	game->conf->no_texture_path = NULL;
 	game->conf->so_texture_path = NULL;
 	game->conf->we_texture_path = NULL;
@@ -23,6 +25,7 @@ void _init(t_game *game)
 	game->conf->ceiling_color = -1;
 	game->conf->map = NULL;
 	game->conf->img = NULL;
+	game->conf->screen = NULL;
 	game->conf->map_width = 0;
 	game->conf->map_height = 0;
 }
@@ -38,7 +41,8 @@ int start_game(t_game *game)
 		return (EXIT_FAILURE);
 	}
 
-	ft_set_ceil_floor_color(game);
+	// Create initial render and minimap
+	render_frame(game);
 	printf(GREEN"Drawing minimap\n"RESET);
 	draw_minimap(game);
 
@@ -48,4 +52,4 @@ int start_game(t_game *game)
 	mlx_terminate(game->mlx);
 	return (EXIT_SUCCESS);
 }
-	
+
