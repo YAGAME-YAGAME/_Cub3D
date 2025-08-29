@@ -13,8 +13,8 @@ void _init(t_game *game)
 	game->player.x =  0;
 	game->player.y =  0;
 	game->player.dir = 'N';
-	game->player.angle = 0;
-	game->player.speed = 3;
+	game->player.angle = 0.0f;
+	game->player.speed = 1;
 	game->conf->no_texture_path = NULL;
 	game->conf->so_texture_path = NULL;
 	game->conf->we_texture_path = NULL;
@@ -31,7 +31,7 @@ int start_game(t_game *game)
 {
 	if(!game)
 		return (EXIT_FAILURE);
-	game->mlx = mlx_init(WIDTH, HEIGHT, "CUB3D", true);
+	game->mlx = mlx_init(WIDTH, HEIGHT, "CUB3D", false);
 	if(!game->mlx)
 	{
 		ft_error("MLX initialization failed!");
@@ -39,10 +39,10 @@ int start_game(t_game *game)
 	}
 
 	ft_set_ceil_floor_color(game);
-	printf(GREEN"Draw %d\n"RESET, game->conf->ceiling_color);
-	draw_map(game);
+	printf(GREEN"Drawing minimap\n"RESET);
+	draw_minimap(game);
 
-	
+	mlx_loop_hook(game->mlx, handle_input, game);
 	mlx_loop(game->mlx);
 
 	mlx_terminate(game->mlx);

@@ -5,88 +5,93 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 14:49:32 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/08/25 17:01:36 by yagame           ###   ########.fr       */
+/*   Created: 2025/08/27 17:00:00 by yagame            #+#    #+#             */
+/*   Updated: 2025/08/27 17:04:25 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-int	scan_number(char *str, int *index)
+static int	validate_rgb_value(int value)
 {
-	char	buffer[10];
-	int		i;
-	int		j;
-	int		color;
-
-	i = 0;
-	j = *index;
-	while (str[j] && ft_isdigit(str[j]))
-		buffer[i++] = str[j++];
-	buffer[i] = 0;
-	if (ft_strlen(buffer) > 3 || (str[j] != ',' && str[j] != 0))
-		return (-1);
-	color = ft_atoi(buffer);
-	if (color > 255)
-		return (-1);
-	*index = j;
-	return (color);
+	return (value >= 0 && value <= 255);
 }
 
-int	parss_number_color(char *line)
+static int	parse_rgb_values(char *rgb_str, int *r, int *g, int *b)
 {
-	int	i;
-	int	r;
-	int	g;
-	int	b;
+	char	**rgb_split;
+	int		result;
 
-	i = 0;
-	r = scan_number(line, &i);
-	i++;
-	g = scan_number(line, &i);
-	i++;
-	b = scan_number(line, &i);
-	if (line[i] != 0 || r < 0 || b < 0 || g < 0)
-		return (-1);
-	return ((r << 16) | (g << 8) | b);
-}
-
-bool	parss_color(t_game *game, char **str)
-{
-	char	*new;
-
-	if (!ft_strcmp(str[0], "F"))
+	rgb_split = ft_split(rgb_str, ',');
+	if (!rgb_split || !rgb_split[0] || !rgb_split[1] || !rgb_split[2] || rgb_split[3])
 	{
-		new = remove_nline(str[1]);
-		game->conf->floor_color = parss_number_color(new);
-		free(new);
-		if (game->conf->floor_color < 0)
-			return (false);
-		return (true);
+		free_split(rgb_split);
+		return (0);
 	}
-	else if (!ft_strcmp(str[0], "C"))
+	
+	*r = ft_atoi(rgb_split[0]);
+	*g = ft_atoi(rgb_split[1]);
+	*b = ft_atoi(rgb_split[2]);
+	
+	result = validate_rgb_value(*r) && validate_rgb_value(*g) && validate_rgb_value(*b);
+	free_split(rgb_split);
+	return (result);
+}
+
+static uint32_t	rgb_to_hex(int r, int g, int b)
+{
+	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
+}
+
+int	parse_color(t_game *game, char *line)
+{
+	char	*trimmed;
+	char	*color_str;
+	int		r, g, b;
+
+	trimmed = trim_whitespace(line);
+	if (!trimmed)
+		return (0);
+	
+	if (ft_strncmp(trimmed, "F ", 2) == 0)
 	{
-		new = remove_nline(str[1]);
-		game->conf->ceiling_color = parss_number_color(new);
-		free(new);
-		if (game->conf->ceiling_color < 0)
-			return (false);
-		return (true);
+		if (game->conf->floor_color != -1)
+		{
+			free(trimmed);
+			return (0); // Floor color already set
+		}
+		color_str = trim_whitespace(trimmed + 2);
+		if (!color_str || !parse_rgb_values(color_str, &r, &g, &b))
+		{
+			free(trimmed);
+			free(color_str);
+			return (0);
+		}
+		game->conf->floor_color = rgb_to_hex(r, g, b);
+		free(color_str);
+	}
+	else if (ft_strncmp(trimmed, "C ", 2) == 0)
+	{
+		if (game->conf->ceiling_color != -1)
+		{
+			free(trimmed);
+			return (0); // Ceiling color already set
+		}
+		color_str = trim_whitespace(trimmed + 2);
+		if (!color_str || !parse_rgb_values(color_str, &r, &g, &b))
+		{
+			free(trimmed);
+			free(color_str);
+			return (0);
+		}
+		game->conf->ceiling_color = rgb_to_hex(r, g, b);
+		free(color_str);
 	}
 	else
-		return (false);
-}
-
-bool	color_init(t_game *game, char *str)
-{
-	char	**tab;
-
-	tab = ft_split(str, ' ');
-	if (!tab)
-		return (false);
-	if (size_tab(tab) != 2)
-		return (clean_tab(&tab), false);
-	if (!parss_color(game, tab))
-		return (clean_tab(&tab), false);
-	return (true);
+	{
+		free(trimmed);
+		return (0);
+	}
+	free(trimmed);
+	return (1);
 }

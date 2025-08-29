@@ -5,87 +5,81 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/24 23:08:53 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/08/25 17:00:41 by yagame           ###   ########.fr       */
+/*   Created: 2025/08/27 17:00:00 by yagame            #+#    #+#             */
+/*   Updated: 2025/08/27 17:04:25 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-bool	no_init(t_game *game, char *path)
+static int	set_texture_path(char **texture_path, char *path)
 {
-	char	*str;
-
-	str = remove_nline(path);
-	game->conf->no_texture_path = str;
-	return (true);
-	free(str);
-	return (false);
+	if (*texture_path != NULL)
+		return (0); // Texture already set
+	*texture_path = ft_strdup(path);
+	if (!*texture_path)
+		return (0);
+	return (1);
 }
 
-bool	so_init(t_game *game, char *path)
+int	parse_texture(t_game *game, char *line)
 {
-	char	*str;
+	char	*trimmed;
+	char	*path;
 
-	str = remove_nline(path);
-	game->conf->so_texture_path = str;
-	return (true);
-	free(str);
-	return (false);
-}
-
-bool	we_init(t_game *game, char *path)
-{
-	char	*str;
-
-	str = remove_nline(path);
-	game->conf->we_texture_path = str;
-	return (true);
-	free(str);
-	return (false);
-}
-
-bool	ea_init(t_game *game, char *path)
-{
-	char	*str;
-
-	str = remove_nline(path);
-	game->conf->ea_texture_path = str;
-	return (true);
-	free(str);
-	return (false);
-}
-
-bool	text_init(t_game *game, char *line)
-{
-	char	**tb_text;
-
-	tb_text = ft_split(line, ' ');
-	if (!tb_text)
-		return (false);
-	if (size_tab(tb_text) > 2)
-		return (clean_tab(&tb_text), false);
-	if (tb_text[0] && tb_text[1] && !ft_strcmp(tb_text[0], "NO"))
+	trimmed = trim_whitespace(line);
+	if (!trimmed)
+		return (0);
+	
+	if (ft_strncmp(trimmed, "NO ", 3) == 0)
 	{
-		if (!no_init(game, tb_text[1]))
-			return (clean_tab(&tb_text), false);
+		path = trim_whitespace(trimmed + 3);
+		if (!path || !set_texture_path(&game->conf->no_texture_path, path))
+		{
+			free(trimmed);
+			free(path);
+			return (0);
+		}
+		free(path);
 	}
-	else if (tb_text[0] && tb_text[1] && !ft_strcmp(tb_text[0], "SO"))
+	else if (ft_strncmp(trimmed, "SO ", 3) == 0)
 	{
-		if (!so_init(game, tb_text[1]))
-			return (clean_tab(&tb_text), false);
+		path = trim_whitespace(trimmed + 3);
+		if (!path || !set_texture_path(&game->conf->so_texture_path, path))
+		{
+			free(trimmed);
+			free(path);
+			return (0);
+		}
+		free(path);
 	}
-	else if (tb_text[0] && tb_text[1] && !ft_strcmp(tb_text[0], "WE"))
+	else if (ft_strncmp(trimmed, "WE ", 3) == 0)
 	{
-		if (!we_init(game, tb_text[1]))
-			return (clean_tab(&tb_text), false);
+		path = trim_whitespace(trimmed + 3);
+		if (!path || !set_texture_path(&game->conf->we_texture_path, path))
+		{
+			free(trimmed);
+			free(path);
+			return (0);
+		}
+		free(path);
 	}
-	else if (tb_text[0] && tb_text[1] && !ft_strcmp(tb_text[0], "EA"))
+	else if (ft_strncmp(trimmed, "EA ", 3) == 0)
 	{
-		if (!ea_init(game, tb_text[1]))
-			return (clean_tab(&tb_text), false);
+		path = trim_whitespace(trimmed + 3);
+		if (!path || !set_texture_path(&game->conf->ea_texture_path, path))
+		{
+			free(trimmed);
+			free(path);
+			return (0);
+		}
+		free(path);
 	}
 	else
-		return (false);
-	return (clean_tab(&tb_text), true);
+	{
+		free(trimmed);
+		return (0);
+	}
+	free(trimmed);
+	return (1);
 }

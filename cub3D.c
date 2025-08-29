@@ -6,7 +6,7 @@
 /*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:49:15 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/08/25 18:21:34 by yagame           ###   ########.fr       */
+/*   Updated: 2025/08/27 17:04:25 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,35 @@ void	desplay_struct(t_game *game)
 	}
 }
 
+// char** map = {
+// 			"1111111111111111111111111",
+// 			"1000000000110000000000001",
+// 			"1011000001110000000000001",
+// 			"1001000000000000000000001",
+// 	"111111111011000001110000000000001",
+// 	"100000000011000001110111111111111",
+// 	"11110111111111011100000010001",
+// 	"11110111111111011101010010001",
+// 	"11000000110101011100000010001",
+// 	"10000000000000001100000010001",
+// 	"10000000000000001101010010001",
+// 	"11000001110101011111011110N0111",
+//     "11110111 1110101 101111010001",
+// 	"111111111 1111111 111111111111"
+// };
+
 int	main(int ac, char **av)
 {
 	t_game	game;
 	
-	game.conf = malloc(sizeof(game.conf));
+	game.conf = malloc(sizeof(*game.conf));
 	if (!game.conf)
 		return (message_error("error malloc"), 1);
 	if (ac != 2)
 		message_error("error in argument");
 	_init(&game);
-	if (!parssing(&game, av[1]))
-		{return (1);}
-	// desplay_struct(&game);
+	parssing_map(&game, av[1]);
+	desplay_struct(&game);
 	if(start_game(&game))
 		return (EXIT_FAILURE);
 	return (0);

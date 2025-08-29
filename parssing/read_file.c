@@ -5,86 +5,42 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/24 18:02:23 by ymouchta          #+#    #+#             */
-/*   Updated: 2025/08/25 16:53:13 by yagame           ###   ########.fr       */
+/*   Created: 2025/08/27 17:00:00 by yagame            #+#    #+#             */
+/*   Updated: 2025/08/27 17:04:25 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-bool	is_space(char c)
+char	**read_file_lines(char *filename, int *line_count)
 {
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
-		|| c == '\f')
-		return (true);
-	return (false);
-}
+	int		fd;
+	char	**lines;
+	char	*line;
+	int		i;
 
-bool	if_line_empty(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
+	*line_count = count_lines_in_file(filename);
+	if (*line_count <= 0)
+		return (NULL);
+	
+	lines = malloc(sizeof(char *) * (*line_count + 1));
+	if (!lines)
+		return (NULL);
+	
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
 	{
-		if (!is_space(line[i]))
-			return (false);
+		free(lines);
+		return (NULL);
+	}
+	
+	i = 0;
+	while ((line = get_next_line(fd)) != NULL && i < *line_count)
+	{
+		lines[i] = line;
 		i++;
 	}
-	return (true);
-}
-
-bool	parssing(t_game *game, char *f_name)
-{
-	char	*line;
-	char	*map;
-	char	*tmp;
-	int		list;
-	int		fd;
-
-	list = 0;
-	map = NULL;
-	game->conf->map_width = 0;
-	game->conf->map_height = 0;
-	if (!check_name(f_name))
-		return (message_error(NAME), false);
-	fd = open(f_name, O_RDWR, 0777);
-	if (fd < 0)
-		return (false);
-	line = get_next_line(fd);
-	while (line)
-	{
-		if (!if_line_empty(line))
-		{
-			if (list < 4)
-			{
-				if (text_init(game, line))
-					list++;
-				else
-					return (message_error(TEXT), false);
-			}
-			else if (list >= 4 && list < 6)
-			{
-				if (color_init(game, line))
-					list++;
-				else
-					return (message_error(COLOR), false);
-			}
-			else
-			{
-				if ((int)ft_strlen(line) > game->conf->map_width)
-					game->conf->map_width = ft_strlen(line) - 1;
-				game->conf->map_height += 1;
-				tmp = ft_strdup(map);
-				if (map)
-					free(map);
-				map = ft_strjoin(tmp, line);
-				if (tmp)
-					free(tmp);
-			}
-		}
-		line = get_next_line(fd);
-	}
-	parssing_map(game, map);
-	return (true);
+	lines[i] = NULL;
+	close(fd);
+	return (lines);
 }

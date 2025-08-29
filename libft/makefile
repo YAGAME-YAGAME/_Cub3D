@@ -10,6 +10,8 @@ SOURCES = ft_strlen.c	\
 		ft_atoi.c		\
 		ft_isdigit.c	\
 		ft_putstr_fd.c	\
+		ft_strtrim.c    \
+		ft_strlcpy.c    \
 
 OBJECTS = $(SOURCES:.c=.o)
 

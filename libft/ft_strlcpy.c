@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_name.c                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yagame <yagame@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/27 17:00:00 by yagame            #+#    #+#             */
-/*   Updated: 2025/08/27 17:04:25 by yagame           ###   ########.fr       */
+/*   Created: 2024/10/24 11:25:17 by otzarwal          #+#    #+#             */
+/*   Updated: 2025/08/27 15:30:15 by yagame           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3D.h"
+#include "libft.h"
 
-int	check_file_name(char *file_name)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	int	len;
+	size_t	i;
 
-	if (!file_name)
-		return (0);
-	len = ft_strlen(file_name);
-	if (len < 4)
-		return (0);
-	if (ft_strncmp(file_name + len - 4, ".cub", 4) != 0)
-		return (0);
-	return (1);
+	i = 0;
+	if (size == 0)
+		return (ft_strlen(src));
+	while (src[i] && i < size - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	while (src[i])
+		i++;
+	return (i);
 }

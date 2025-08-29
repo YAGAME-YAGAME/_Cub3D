@@ -18,7 +18,8 @@ SRCS = cub3D.c \
 	   parssing/check_wall.c		\
 	   game_start/init_game.c		\
 	   game_start/set_colors.c      \
-	   game_start/draw.c      \
+	   game_start/draw.c     		\
+	   game_start/handle_input.c    \
 
 
 OBJS = $(SRCS:.c=.o)
